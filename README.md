@@ -8,4 +8,5 @@ I'm too lazy to test everything, I just need this for another project, if you fe
 Currently it just supports the Windows version of libmpv, but that should be easy to change.
 
 This is partially inspired by [NickVision.MPVSharp](https://github.com/NickvisionApps/MPVSharp) and [LibMPV](https://github.com/homov/LibMpv) 
+
 Any similarities are purely cause, well, we all map the sae library.
