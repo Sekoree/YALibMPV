@@ -12,6 +12,6 @@ Any similarities are purely cause, well, we all map the same library.
 ## Current state of this
 
 - Linux is very untested
-- OSX too (I dont have hgardware for that, but I wanted to include it)
+- OSX too (I dont have hardware for that, but I wanted to include it)
 - The most tested stuff is the Node stuff cause I wanted to see if I could do a loadfile from a bytearray (didnt work :/)
-- The render methods are also untested as I just used the "wid"/Native emebedding so far in my testing
+- The render methods are also untested as I just used the "wid" command/Native emebedding so far in my other project
