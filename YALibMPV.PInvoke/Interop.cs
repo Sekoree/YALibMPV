@@ -10,10 +10,21 @@ namespace YALibMPV.PInvoke;
 
 public static partial class Interop
 {
+    #if WINDOWS
+    private const string LibraryName = "libmpv-2";
+    #elif LINUX
+    private const string LibraryName = "libmpv.so"; //Should be the right one, .so seems ot be important
+    #elif OSX
+    private const string LibraryName = "libmpv.dylib"; //I have no hardware to test this, so no clue if it works
+    #else
+    private const string LibraryName = "libmpv-2"; //Set your own in debug I guess
+    #endif
+
+
     #region client.h
 
     /// <summary>Return the MPV_CLIENT_API_VERSION the mpv source has been compiled with.</summary>
-    [LibraryImport("libmpv-2", EntryPoint = "mpv_client_api_version")]
+    [LibraryImport(LibraryName, EntryPoint = "mpv_client_api_version")]
     public static partial ulong MPVClientAPIVersion();
 
     /// <summary>
@@ -25,7 +36,7 @@ public static partial class Interop
     /// <para>A static string describing the error. The string is completely</para>
     /// <para>static, i.e. doesn't need to be deallocated, and is valid forever.</para>
     /// </returns>
-    [LibraryImport("libmpv-2", EntryPoint = "mpv_error_string", StringMarshalling = StringMarshalling.Custom,
+    [LibraryImport(LibraryName, EntryPoint = "mpv_error_string", StringMarshalling = StringMarshalling.Custom,
         StringMarshallingCustomType = typeof(MPVStringMarshaller))]
     public static partial string MPVErrorString(int error);
 
@@ -38,7 +49,7 @@ public static partial class Interop
     /// <para>A static string describing the error. The string is completely</para>
     /// <para>static, i.e. doesn't need to be deallocated, and is valid forever.</para>
     /// </returns>
-    [LibraryImport("libmpv-2", EntryPoint = "mpv_error_string", StringMarshalling = StringMarshalling.Custom,
+    [LibraryImport(LibraryName, EntryPoint = "mpv_error_string", StringMarshalling = StringMarshalling.Custom,
         StringMarshallingCustomType = typeof(MPVStringMarshaller))]
     public static partial string MPVErrorString(MPVError error);
 
@@ -50,7 +61,7 @@ public static partial class Interop
     /// <para>mpv memory not owned by the caller will lead to undefined behavior.</para>
     /// </summary>
     /// <param name="data">A valid pointer returned by the API, or NULL.</param>
-    [LibraryImport("libmpv-2", EntryPoint = "mpv_free")]
+    [LibraryImport(LibraryName, EntryPoint = "mpv_free")]
     public static partial void MPVFree(ref IntPtr data);
 
     /// <summary>
@@ -59,7 +70,7 @@ public static partial class Interop
     /// <para>mpv memory not owned by the caller will lead to undefined behavior.</para>
     /// </summary>
     /// <param name="data">A valid pointer returned by the API, or NULL.</param>
-    [LibraryImport("libmpv-2", EntryPoint = "mpv_free")]
+    [LibraryImport(LibraryName, EntryPoint = "mpv_free")]
     public static partial void MPVFree(ref MPVNode data);
 
     /// <summary>
@@ -68,7 +79,7 @@ public static partial class Interop
     /// <para>mpv memory not owned by the caller will lead to undefined behavior.</para>
     /// </summary>
     /// <param name="data">A valid pointer returned by the API, or NULL.</param>
-    [LibraryImport("libmpv-2", EntryPoint = "mpv_free")]
+    [LibraryImport(LibraryName, EntryPoint = "mpv_free")]
     public static partial void MPVFree(ref MPVNodeList data);
 
     /// <summary>
@@ -77,7 +88,7 @@ public static partial class Interop
     /// <para>mpv memory not owned by the caller will lead to undefined behavior.</para>
     /// </summary>
     /// <param name="data">A valid pointer returned by the API, or NULL.</param>
-    [LibraryImport("libmpv-2", EntryPoint = "mpv_free")]
+    [LibraryImport(LibraryName, EntryPoint = "mpv_free")]
     public static partial void MPVFree(ref MPVByteArray data);
 
     #endregion
@@ -90,7 +101,7 @@ public static partial class Interop
     /// <para>The client name. The string is read-only and is valid until the</para>
     /// <para>mpv_handle is destroyed.</para>
     /// </returns>
-    [LibraryImport("libmpv-2", EntryPoint = "mpv_client_name", StringMarshalling = StringMarshalling.Custom,
+    [LibraryImport(LibraryName, EntryPoint = "mpv_client_name", StringMarshalling = StringMarshalling.Custom,
         StringMarshallingCustomType = typeof(MPVStringMarshaller))]
     public static partial string MPVClientName(MPVHandle ctx);
 
@@ -108,7 +119,7 @@ public static partial class Interop
     /// <para>client name as first argument, but also accepts the client ID formatted in</para>
     /// <para>this manner.</para>
     /// </remarks>
-    [LibraryImport("libmpv-2", EntryPoint = "mpv_client_id")]
+    [LibraryImport(LibraryName, EntryPoint = "mpv_client_id")]
     public static partial long MPVClientId(MPVHandle ctx);
 
     /// <summary>
@@ -162,7 +173,7 @@ public static partial class Interop
     /// <para>client handle. (Whether concurrent access is definitely allowed or not has</para>
     /// <para>yet to be decided.)</para>
     /// </remarks>
-    [LibraryImport("libmpv-2", EntryPoint = "mpv_create")]
+    [LibraryImport(LibraryName, EntryPoint = "mpv_create")]
     public static partial MPVHandle MPVCreate();
 
     /// <summary>
@@ -185,7 +196,7 @@ public static partial class Interop
     /// <para>- input-app-events (OSX)</para>
     /// <para>- all encoding mode options</para>
     /// </remarks>
-    [LibraryImport("libmpv-2", EntryPoint = "mpv_initialize")]
+    [LibraryImport(LibraryName, EntryPoint = "mpv_initialize")]
     public static partial MPVError MPVInitialize(MPVHandle ctx);
 
     /// <summary>
@@ -199,7 +210,7 @@ public static partial class Interop
     /// <para>be sent MPV_EVENT_SHUTDOWN. This function may block until these clients</para>
     /// <para>have responded to the shutdown event, and the core is finally destroyed.</para>
     /// </remarks>
-    [LibraryImport("libmpv-2", EntryPoint = "mpv_destroy")]
+    [LibraryImport(LibraryName, EntryPoint = "mpv_destroy")]
     public static partial void MPVDestroy(MPVHandle ctx);
 
     /// <summary>
@@ -226,7 +237,7 @@ public static partial class Interop
     /// <para>this function will merely send a quit command and then call</para>
     /// <para>mpv_destroy(), without waiting for the actual shutdown.</para>
     /// </remarks>
-    [LibraryImport("libmpv-2", EntryPoint = "mpv_terminate_destroy")]
+    [LibraryImport(LibraryName, EntryPoint = "mpv_terminate_destroy")]
     public static partial void MPVTerminateDestroy(MPVHandle ctx);
 
     /// <summary>
@@ -256,7 +267,7 @@ public static partial class Interop
     /// <para>mpv_initialize(). The new handle is always initialized, unless ctx=NULL was</para>
     /// <para>passed.</para>
     /// </remarks>
-    [LibraryImport("libmpv-2", EntryPoint = "mpv_create_client", StringMarshalling = StringMarshalling.Utf8)]
+    [LibraryImport(LibraryName, EntryPoint = "mpv_create_client", StringMarshalling = StringMarshalling.Utf8)]
     public static partial MPVHandle MPVCreateClient(MPVHandle ctx, string name);
 
     /// <summary>
@@ -272,7 +283,7 @@ public static partial class Interop
     /// <para>mpv_terminate_destroy() _and_ mpv_destroy() for the last non-weak</para>
     /// <para>mpv_handle will block until all weak mpv_handles are destroyed.</para>
     /// </remarks>
-    [LibraryImport("libmpv-2", EntryPoint = "mpv_create_weak_client", StringMarshalling = StringMarshalling.Utf8)]
+    [LibraryImport(LibraryName, EntryPoint = "mpv_create_weak_client", StringMarshalling = StringMarshalling.Utf8)]
     public static partial MPVHandle MPVCreateWeakClient(MPVHandle ctx, string name);
 
     /// <summary>
@@ -293,7 +304,7 @@ public static partial class Interop
     /// <para>possible that some options were successfully set even if any of these errors</para>
     /// <para>happen.</para>
     /// </remarks>
-    [LibraryImport("libmpv-2", EntryPoint = "mpv_load_config_file", StringMarshalling = StringMarshalling.Utf8)]
+    [LibraryImport(LibraryName, EntryPoint = "mpv_load_config_file", StringMarshalling = StringMarshalling.Utf8)]
     public static partial MPVError MPVLoadConfigFile(MPVHandle ctx, string filename);
 
     /// <summary>
@@ -309,7 +320,7 @@ public static partial class Interop
     /// <para>within wakeup callbacks), as long as the context is valid.</para>
     /// <para>Safe to be called from mpv render API threads.</para>
     /// </remarks>
-    [LibraryImport("libmpv-2", EntryPoint = "mpv_get_time_us")]
+    [LibraryImport(LibraryName, EntryPoint = "mpv_get_time_us")]
     public static partial long MPVGetTimeUs(MPVHandle ctx);
 
     /// <summary>
@@ -323,7 +334,7 @@ public static partial class Interop
     /// <para>be called. (This is just a clarification that there's no danger of anything</para>
     /// <para>strange happening in these cases.)</para>
     /// </remarks>
-    [LibraryImport("libmpv-2", EntryPoint = "mpv_free_node_contents", StringMarshalling = StringMarshalling.Utf8)]
+    [LibraryImport(LibraryName, EntryPoint = "mpv_free_node_contents", StringMarshalling = StringMarshalling.Utf8)]
     public static partial void MPVFreeNodeContents(ref MPVNode baseNode); //Maybe ref?
 
     #region MPVSetOption
@@ -354,7 +365,7 @@ public static partial class Interop
     /// <para>these are resolved, the option setting functions might be fully</para>
     /// <para>deprecated.</para>
     /// </remarks>
-    [LibraryImport("libmpv-2", EntryPoint = "mpv_set_option", StringMarshalling = StringMarshalling.Utf8)]
+    [LibraryImport(LibraryName, EntryPoint = "mpv_set_option", StringMarshalling = StringMarshalling.Utf8)]
     public static partial MPVError MPVSetOption(MPVHandle ctx, string name, MPVFormat format,
         [MarshalAs(UnmanagedType.I4)] ref bool data);
 
@@ -384,7 +395,7 @@ public static partial class Interop
     /// <para>these are resolved, the option setting functions might be fully</para>
     /// <para>deprecated.</para>
     /// </remarks>
-    [LibraryImport("libmpv-2", EntryPoint = "mpv_set_option", StringMarshalling = StringMarshalling.Utf8)]
+    [LibraryImport(LibraryName, EntryPoint = "mpv_set_option", StringMarshalling = StringMarshalling.Utf8)]
     public static partial MPVError MPVSetOption(MPVHandle ctx, string name, MPVFormat format, ref long data);
 
     /// <summary>
@@ -413,7 +424,7 @@ public static partial class Interop
     /// <para>these are resolved, the option setting functions might be fully</para>
     /// <para>deprecated.</para>
     /// </remarks>
-    [LibraryImport("libmpv-2", EntryPoint = "mpv_set_option", StringMarshalling = StringMarshalling.Utf8)]
+    [LibraryImport(LibraryName, EntryPoint = "mpv_set_option", StringMarshalling = StringMarshalling.Utf8)]
     public static partial MPVError MPVSetOption(MPVHandle ctx, string name, MPVFormat format, ref double data);
 
     /// <summary>
@@ -442,7 +453,7 @@ public static partial class Interop
     /// <para>these are resolved, the option setting functions might be fully</para>
     /// <para>deprecated.</para>
     /// </remarks>
-    [LibraryImport("libmpv-2", EntryPoint = "mpv_set_option", StringMarshalling = StringMarshalling.Utf8)]
+    [LibraryImport(LibraryName, EntryPoint = "mpv_set_option", StringMarshalling = StringMarshalling.Utf8)]
     public static partial MPVError MPVSetOption(MPVHandle ctx, string name, MPVFormat format, ref string data);
 
     /// <summary>
@@ -471,7 +482,7 @@ public static partial class Interop
     /// <para>these are resolved, the option setting functions might be fully</para>
     /// <para>deprecated.</para>
     /// </remarks>
-    [LibraryImport("libmpv-2", EntryPoint = "mpv_set_option", StringMarshalling = StringMarshalling.Utf8)]
+    [LibraryImport(LibraryName, EntryPoint = "mpv_set_option", StringMarshalling = StringMarshalling.Utf8)]
     public static partial MPVError MPVSetOption(MPVHandle ctx, string name, MPVFormat format, ref MPVNode data);
 
     #endregion
@@ -481,7 +492,7 @@ public static partial class Interop
     /// <para>calling mpv_set_option() with MPV_FORMAT_STRING.</para>
     /// </summary>
     /// <returns>error code</returns>
-    [LibraryImport("libmpv-2", EntryPoint = "mpv_set_option_string", StringMarshalling = StringMarshalling.Utf8)]
+    [LibraryImport(LibraryName, EntryPoint = "mpv_set_option_string", StringMarshalling = StringMarshalling.Utf8)]
     public static partial MPVError MPVSetOptionString(MPVHandle ctx, string name, ref string data);
 
     /// <summary>
@@ -500,7 +511,7 @@ public static partial class Interop
     /// <para>Does not use OSD and string expansion by default (unlike mpv_command_string()</para>
     /// <para>and input.conf).</para>
     /// </remarks>
-    [LibraryImport("libmpv-2", EntryPoint = "mpv_command", StringMarshalling = StringMarshalling.Utf8)]
+    [LibraryImport(LibraryName, EntryPoint = "mpv_command", StringMarshalling = StringMarshalling.Utf8)]
     public static partial MPVError MPVCommand(MPVHandle ctx, string?[] args);
 
     /// <summary>
@@ -539,7 +550,7 @@ public static partial class Interop
     /// <para>as documented in each command description. Some commands do not</para>
     /// <para>support named arguments at all, and must use MPV_FORMAT_NODE_ARRAY.</para>
     /// </remarks>
-    [LibraryImport("libmpv-2", EntryPoint = "mpv_command_node", StringMarshalling = StringMarshalling.Utf8)]
+    [LibraryImport(LibraryName, EntryPoint = "mpv_command_node", StringMarshalling = StringMarshalling.Utf8)]
     public static partial MPVError MPVCommandNode(MPVHandle ctx, ref MPVNode args, out MPVNode result);
 
     /// <summary>This is essentially identical to mpv_command() but it also returns a result.</summary>
@@ -557,7 +568,7 @@ public static partial class Interop
     /// </param>
     /// <returns>error code (the result parameter is not set on error)</returns>
     /// <remarks>Does not use OSD and string expansion by default.</remarks>
-    [LibraryImport("libmpv-2", EntryPoint = "mpv_command_ret", StringMarshalling = StringMarshalling.Utf8)]
+    [LibraryImport(LibraryName, EntryPoint = "mpv_command_ret", StringMarshalling = StringMarshalling.Utf8)]
     public static partial MPVError MPVCommandRet(MPVHandle ctx, string?[] args, out MPVNode result);
 
     /// <summary>
@@ -566,7 +577,7 @@ public static partial class Interop
     /// <para>need quoting/escaping.</para>
     /// </summary>
     /// <remarks>This also has OSD and string expansion enabled by default.</remarks>
-    [LibraryImport("libmpv-2", EntryPoint = "mpv_command_string", StringMarshalling = StringMarshalling.Utf8)]
+    [LibraryImport(LibraryName, EntryPoint = "mpv_command_string", StringMarshalling = StringMarshalling.Utf8)]
     public static partial MPVError MPVCommandString(MPVHandle ctx, string? args);
 
     /// <summary>Same as mpv_command, but run the command asynchronously.</summary>
@@ -588,7 +599,7 @@ public static partial class Interop
     /// <para>positive.</para>
     /// <para>Safe to be called from mpv render API threads.</para>
     /// </remarks>
-    [LibraryImport("libmpv-2", EntryPoint = "mpv_command_async", StringMarshalling = StringMarshalling.Utf8)]
+    [LibraryImport(LibraryName, EntryPoint = "mpv_command_async", StringMarshalling = StringMarshalling.Utf8)]
     public static partial MPVError MPVCommandAsync(MPVHandle ctx, ulong replyUserdata, string?[] args);
 
     /// <summary>
@@ -607,7 +618,7 @@ public static partial class Interop
     /// <para>See mpv_command_async() for details.</para>
     /// <para>Safe to be called from mpv render API threads.</para>
     /// </remarks>
-    [LibraryImport("libmpv-2", EntryPoint = "mpv_command_node_async", StringMarshalling = StringMarshalling.Utf8)]
+    [LibraryImport(LibraryName, EntryPoint = "mpv_command_node_async", StringMarshalling = StringMarshalling.Utf8)]
     public static partial MPVError MPVCommandNodeAsync(MPVHandle ctx, ulong replyUserdata, ref MPVNode args);
 
     /// <summary>
@@ -637,7 +648,7 @@ public static partial class Interop
     /// <para>request will be effective is _after_ e.g. mpv_command_async() has returned,</para>
     /// <para>and before the command has signaled completion with MPV_EVENT_COMMAND_REPLY.</para>
     /// </remarks>
-    [LibraryImport("libmpv-2", EntryPoint = "mpv_abort_async_command", StringMarshalling = StringMarshalling.Utf8)]
+    [LibraryImport(LibraryName, EntryPoint = "mpv_abort_async_command", StringMarshalling = StringMarshalling.Utf8)]
     public static partial MPVError MPVAbortAsyncCommand(MPVHandle ctx, ulong replyUserdata);
 
     #region Set Property
@@ -672,7 +683,7 @@ public static partial class Interop
     /// <para>the properties after mpv_initialize(). These conflicts will be removed</para>
     /// <para>in mpv 0.23.0. See mpv_set_option() for further remarks.</para>
     /// </remarks>
-    [LibraryImport("libmpv-2", EntryPoint = "mpv_set_property", StringMarshalling = StringMarshalling.Utf8)]
+    [LibraryImport(LibraryName, EntryPoint = "mpv_set_property", StringMarshalling = StringMarshalling.Utf8)]
     public static partial MPVError MPVSetProperty(MPVHandle ctx, string name, MPVFormat format,
         [MarshalAs(UnmanagedType.I4)] ref bool data);
 
@@ -706,7 +717,7 @@ public static partial class Interop
     /// <para>the properties after mpv_initialize(). These conflicts will be removed</para>
     /// <para>in mpv 0.23.0. See mpv_set_option() for further remarks.</para>
     /// </remarks>
-    [LibraryImport("libmpv-2", EntryPoint = "mpv_set_property", StringMarshalling = StringMarshalling.Utf8)]
+    [LibraryImport(LibraryName, EntryPoint = "mpv_set_property", StringMarshalling = StringMarshalling.Utf8)]
     public static partial MPVError MPVSetProperty(MPVHandle ctx, string name, MPVFormat format, ref long data);
 
     /// <summary>
@@ -739,7 +750,7 @@ public static partial class Interop
     /// <para>the properties after mpv_initialize(). These conflicts will be removed</para>
     /// <para>in mpv 0.23.0. See mpv_set_option() for further remarks.</para>
     /// </remarks>
-    [LibraryImport("libmpv-2", EntryPoint = "mpv_set_property", StringMarshalling = StringMarshalling.Utf8)]
+    [LibraryImport(LibraryName, EntryPoint = "mpv_set_property", StringMarshalling = StringMarshalling.Utf8)]
     public static partial MPVError MPVSetProperty(MPVHandle ctx, string name, MPVFormat format, ref double data);
 
     /// <summary>
@@ -772,7 +783,7 @@ public static partial class Interop
     /// <para>the properties after mpv_initialize(). These conflicts will be removed</para>
     /// <para>in mpv 0.23.0. See mpv_set_option() for further remarks.</para>
     /// </remarks>
-    [LibraryImport("libmpv-2", EntryPoint = "mpv_set_property", StringMarshalling = StringMarshalling.Utf8)]
+    [LibraryImport(LibraryName, EntryPoint = "mpv_set_property", StringMarshalling = StringMarshalling.Utf8)]
     public static partial MPVError MPVSetProperty(MPVHandle ctx, string name, MPVFormat format, ref string data);
 
     /// <summary>
@@ -805,7 +816,7 @@ public static partial class Interop
     /// <para>the properties after mpv_initialize(). These conflicts will be removed</para>
     /// <para>in mpv 0.23.0. See mpv_set_option() for further remarks.</para>
     /// </remarks>
-    [LibraryImport("libmpv-2", EntryPoint = "mpv_set_property", StringMarshalling = StringMarshalling.Utf8)]
+    [LibraryImport(LibraryName, EntryPoint = "mpv_set_property", StringMarshalling = StringMarshalling.Utf8)]
     public static partial MPVError
         MPVSetProperty(MPVHandle ctx, string name, MPVFormat format, ref MPVNode data);
 
@@ -813,7 +824,7 @@ public static partial class Interop
 
     /// <summary>Convenience function to set a property to a string value.</summary>
     /// <remarks>This is like calling mpv_set_property() with MPV_FORMAT_STRING.</remarks>
-    [LibraryImport("libmpv-2", EntryPoint = "mpv_set_property_string", StringMarshalling = StringMarshalling.Utf8)]
+    [LibraryImport(LibraryName, EntryPoint = "mpv_set_property_string", StringMarshalling = StringMarshalling.Utf8)]
     public static partial MPVError MPVSetPropertyString(MPVHandle ctx, string name, ref string data);
 
     /// <summary>Convenience function to delete a property.</summary>
@@ -821,7 +832,7 @@ public static partial class Interop
     /// <param name="name">The property name. See input.rst for a list of properties.</param>
     /// <returns>error code</returns>
     /// <remarks>This is equivalent to running the command &quot;del [name]&quot;.</remarks>
-    [LibraryImport("libmpv-2", EntryPoint = "mpv_del_property", StringMarshalling = StringMarshalling.Utf8)]
+    [LibraryImport(LibraryName, EntryPoint = "mpv_del_property", StringMarshalling = StringMarshalling.Utf8)]
     public static partial MPVError MPVDelProperty(MPVHandle ctx, string name);
 
     #region SetPropertyAsync
@@ -842,7 +853,7 @@ public static partial class Interop
     /// </param>
     /// <returns>error code if sending the request failed</returns>
     /// <remarks>Safe to be called from mpv render API threads.</remarks>
-    [LibraryImport("libmpv-2", EntryPoint = "mpv_set_property_async", StringMarshalling = StringMarshalling.Utf8)]
+    [LibraryImport(LibraryName, EntryPoint = "mpv_set_property_async", StringMarshalling = StringMarshalling.Utf8)]
     public static partial MPVError MPVSetPropertyAsync(MPVHandle ctx, ulong replyUserData, string name,
         MPVFormat format, [MarshalAs(UnmanagedType.I4)] ref bool data);
 
@@ -862,7 +873,7 @@ public static partial class Interop
     /// </param>
     /// <returns>error code if sending the request failed</returns>
     /// <remarks>Safe to be called from mpv render API threads.</remarks>
-    [LibraryImport("libmpv-2", EntryPoint = "mpv_set_property_async", StringMarshalling = StringMarshalling.Utf8)]
+    [LibraryImport(LibraryName, EntryPoint = "mpv_set_property_async", StringMarshalling = StringMarshalling.Utf8)]
     public static partial MPVError MPVSetPropertyAsync(MPVHandle ctx, ulong replyUserData, string name,
         MPVFormat format, ref long data);
 
@@ -882,7 +893,7 @@ public static partial class Interop
     /// </param>
     /// <returns>error code if sending the request failed</returns>
     /// <remarks>Safe to be called from mpv render API threads.</remarks>
-    [LibraryImport("libmpv-2", EntryPoint = "mpv_set_property_async", StringMarshalling = StringMarshalling.Utf8)]
+    [LibraryImport(LibraryName, EntryPoint = "mpv_set_property_async", StringMarshalling = StringMarshalling.Utf8)]
     public static partial MPVError MPVSetPropertyAsync(MPVHandle ctx, ulong replyUserData, string name,
         MPVFormat format, ref double data);
 
@@ -902,7 +913,7 @@ public static partial class Interop
     /// </param>
     /// <returns>error code if sending the request failed</returns>
     /// <remarks>Safe to be called from mpv render API threads.</remarks>
-    [LibraryImport("libmpv-2", EntryPoint = "mpv_set_property_async", StringMarshalling = StringMarshalling.Utf8)]
+    [LibraryImport(LibraryName, EntryPoint = "mpv_set_property_async", StringMarshalling = StringMarshalling.Utf8)]
     public static partial MPVError MPVSetPropertyAsync(MPVHandle ctx, ulong replyUserData, string name,
         MPVFormat format, ref string data);
 
@@ -922,7 +933,7 @@ public static partial class Interop
     /// </param>
     /// <returns>error code if sending the request failed</returns>
     /// <remarks>Safe to be called from mpv render API threads.</remarks>
-    [LibraryImport("libmpv-2", EntryPoint = "mpv_set_property_async", StringMarshalling = StringMarshalling.Utf8)]
+    [LibraryImport(LibraryName, EntryPoint = "mpv_set_property_async", StringMarshalling = StringMarshalling.Utf8)]
     public static partial MPVError MPVSetPropertyAsync(MPVHandle ctx, ulong replyUserData, string name,
         MPVFormat format, ref MPVNode data);
 
@@ -949,7 +960,7 @@ public static partial class Interop
     /// <para>is always converted to MPV_FORMAT_DOUBLE, and access using MPV_FORMAT_STRING</para>
     /// <para>usually invokes a string formatter.</para>
     /// </remarks>
-    [LibraryImport("libmpv-2", EntryPoint = "mpv_get_property", StringMarshalling = StringMarshalling.Utf8)]
+    [LibraryImport(LibraryName, EntryPoint = "mpv_get_property", StringMarshalling = StringMarshalling.Utf8)]
     public static partial MPVError MPVGetProperty(MPVHandle ctx, string name, MPVFormat format,
         [MarshalAs(UnmanagedType.I4)] out bool data);
 
@@ -972,7 +983,7 @@ public static partial class Interop
     /// <para>is always converted to MPV_FORMAT_DOUBLE, and access using MPV_FORMAT_STRING</para>
     /// <para>usually invokes a string formatter.</para>
     /// </remarks>
-    [LibraryImport("libmpv-2", EntryPoint = "mpv_get_property", StringMarshalling = StringMarshalling.Utf8)]
+    [LibraryImport(LibraryName, EntryPoint = "mpv_get_property", StringMarshalling = StringMarshalling.Utf8)]
     public static partial MPVError MPVGetProperty(MPVHandle ctx, string name, MPVFormat format, out long data);
 
     /// <summary>Read the value of the given property.</summary>
@@ -994,7 +1005,7 @@ public static partial class Interop
     /// <para>is always converted to MPV_FORMAT_DOUBLE, and access using MPV_FORMAT_STRING</para>
     /// <para>usually invokes a string formatter.</para>
     /// </remarks>
-    [LibraryImport("libmpv-2", EntryPoint = "mpv_get_property", StringMarshalling = StringMarshalling.Utf8)]
+    [LibraryImport(LibraryName, EntryPoint = "mpv_get_property", StringMarshalling = StringMarshalling.Utf8)]
     public static partial MPVError MPVGetProperty(MPVHandle ctx, string name, MPVFormat format, out double data);
 
     /// <summary>Read the value of the given property.</summary>
@@ -1016,7 +1027,7 @@ public static partial class Interop
     /// <para>is always converted to MPV_FORMAT_DOUBLE, and access using MPV_FORMAT_STRING</para>
     /// <para>usually invokes a string formatter.</para>
     /// </remarks>
-    [LibraryImport("libmpv-2", EntryPoint = "mpv_get_property", StringMarshalling = StringMarshalling.Utf8)]
+    [LibraryImport(LibraryName, EntryPoint = "mpv_get_property", StringMarshalling = StringMarshalling.Utf8)]
     public static partial MPVError MPVGetProperty(MPVHandle ctx, string name, MPVFormat format, out string data);
 
     /// <summary>Read the value of the given property.</summary>
@@ -1038,7 +1049,7 @@ public static partial class Interop
     /// <para>is always converted to MPV_FORMAT_DOUBLE, and access using MPV_FORMAT_STRING</para>
     /// <para>usually invokes a string formatter.</para>
     /// </remarks>
-    [LibraryImport("libmpv-2", EntryPoint = "mpv_get_property", StringMarshalling = StringMarshalling.Utf8)]
+    [LibraryImport(LibraryName, EntryPoint = "mpv_get_property", StringMarshalling = StringMarshalling.Utf8)]
     public static partial MPVError MPVGetProperty(MPVHandle ctx, string name, MPVFormat format, out MPVNode data);
 
     #endregion
@@ -1058,7 +1069,7 @@ public static partial class Interop
     /// <para>On error, NULL is returned. Use mpv_get_property() if you want fine-grained</para>
     /// <para>error reporting.</para>
     /// </remarks>
-    [LibraryImport("libmpv-2", EntryPoint = "mpv_get_property_string", StringMarshalling = StringMarshalling.Custom,
+    [LibraryImport(LibraryName, EntryPoint = "mpv_get_property_string", StringMarshalling = StringMarshalling.Custom,
         StringMarshallingCustomType = typeof(MPVStringMarshaller))]
     public static partial string
         MPVGetPropertyString(MPVHandle ctx,
@@ -1072,7 +1083,7 @@ public static partial class Interop
     /// <para>Property value, or NULL if the property can't be retrieved. Free</para>
     /// <para>the string with mpv_free().</para>
     /// </returns>
-    [LibraryImport("libmpv-2", EntryPoint = "mpv_get_property_osd_string", StringMarshalling = StringMarshalling.Custom,
+    [LibraryImport(LibraryName, EntryPoint = "mpv_get_property_osd_string", StringMarshalling = StringMarshalling.Custom,
         StringMarshallingCustomType = typeof(MPVStringMarshaller))]
     public static partial string MPVGetPropertyOsdString(MPVHandle ctx,
         [MarshalAs(UnmanagedType.LPUTF8Str)] string name); //TODO: Verify if this actually works
@@ -1088,7 +1099,7 @@ public static partial class Interop
     /// <param name="format">see enum mpv_format.</param>
     /// <returns>error code if sending the request failed</returns>
     /// <remarks>Safe to be called from mpv render API threads.</remarks>
-    [LibraryImport("libmpv-2", EntryPoint = "mpv_get_property_async", StringMarshalling = StringMarshalling.Utf8)]
+    [LibraryImport(LibraryName, EntryPoint = "mpv_get_property_async", StringMarshalling = StringMarshalling.Utf8)]
     public static partial MPVError MPVGetPropertyAsync(MPVHandle ctx, ulong replyUserData, string name,
         MPVFormat format);
 
@@ -1144,7 +1155,7 @@ public static partial class Interop
     /// <para>change events, or can unobserve them.</para>
     /// <para>Safe to be called from mpv render API threads.</para>
     /// </remarks>
-    [LibraryImport("libmpv-2", EntryPoint = "mpv_observe_property", StringMarshalling = StringMarshalling.Utf8)]
+    [LibraryImport(LibraryName, EntryPoint = "mpv_observe_property", StringMarshalling = StringMarshalling.Utf8)]
     public static partial MPVError
         MPVObserveProperty(MPVHandle ctx, ulong replyUserData, string name, MPVFormat format);
 
@@ -1159,7 +1170,7 @@ public static partial class Interop
     /// <para>on success (includes the case when 0 were removed)</para>
     /// </returns>
     /// <remarks>Safe to be called from mpv render API threads.</remarks>
-    [LibraryImport("libmpv-2", EntryPoint = "mpv_unobserve_property")]
+    [LibraryImport(LibraryName, EntryPoint = "mpv_unobserve_property")]
     public static partial MPVError MPVUnobserveProperty(MPVHandle ctx, ulong registeredReplyUserdata);
 
     /// <summary>Return a string describing the event. For unknown events, NULL is returned.</summary>
@@ -1176,7 +1187,7 @@ public static partial class Interop
     /// <para>Note that all events actually returned by the API will also yield a non-NULL</para>
     /// <para>string with this function.</para>
     /// </remarks>
-    [LibraryImport("libmpv-2", EntryPoint = "mpv_event_name", StringMarshalling = StringMarshalling.Custom,
+    [LibraryImport(LibraryName, EntryPoint = "mpv_event_name", StringMarshalling = StringMarshalling.Custom,
         StringMarshallingCustomType = typeof(MPVStringMarshaller))]
     public static partial string MPVEventName(MPVEventId eventId);
 
@@ -1205,7 +1216,7 @@ public static partial class Interop
     /// <para>any memory allocations made by this API function.</para>
     /// <para>Safe to be called from mpv render API threads.</para>
     /// </remarks>
-    [LibraryImport("libmpv-2", EntryPoint = "mpv_event_to_node", StringMarshalling = StringMarshalling.Utf8)]
+    [LibraryImport(LibraryName, EntryPoint = "mpv_event_to_node", StringMarshalling = StringMarshalling.Utf8)]
     public static partial MPVError MPVEventToNode(out MPVNode dst, ref MPVEvent src);
 
     /// <summary>Enable or disable the given event.</summary>
@@ -1219,7 +1230,7 @@ public static partial class Interop
     /// <para>MPV_EVENT_TICK.)</para>
     /// <para>Safe to be called from mpv render API threads.</para>
     /// </remarks>
-    [LibraryImport("libmpv-2", EntryPoint = "mpv_request_event")]
+    [LibraryImport(LibraryName, EntryPoint = "mpv_request_event")]
     public static partial MPVError
         MPVRequestEvent(MPVHandle ctx, MPVEventId eventId,
             [MarshalAs(UnmanagedType.I4)] bool enable); //TODO: Check bool to int works
@@ -1240,7 +1251,7 @@ public static partial class Interop
     /// <para>Also see mpv_log_level.</para>
     /// </param>
     /// <returns>error code</returns>
-    [LibraryImport("libmpv-2", EntryPoint = "mpv_request_log_messages", StringMarshalling = StringMarshalling.Utf8)]
+    [LibraryImport(LibraryName, EntryPoint = "mpv_request_log_messages", StringMarshalling = StringMarshalling.Utf8)]
     public static partial MPVError MPVRequestLogMessages(MPVHandle ctx, string minLevel);
 
     /// <summary>
@@ -1277,7 +1288,7 @@ public static partial class Interop
     /// <para>As long as the timeout is 0, this is safe to be called from mpv render API</para>
     /// <para>threads.</para>
     /// </remarks>
-    [LibraryImport("libmpv-2", EntryPoint = "mpv_wait_event")]
+    [LibraryImport(LibraryName, EntryPoint = "mpv_wait_event")]
     public static partial MPVEvent MPVWaitEvent(MPVHandle ctx, double timeout);
 
     /// <summary>
@@ -1293,7 +1304,7 @@ public static partial class Interop
     /// <para>is woken up at all.</para>
     /// <para>Safe to be called from mpv render API threads.</para>
     /// </remarks>
-    [LibraryImport("libmpv-2", EntryPoint = "mpv_wakeup")]
+    [LibraryImport(LibraryName, EntryPoint = "mpv_wakeup")]
     public static partial void MPVWakeup(MPVHandle ctx);
 
     /// <summary>
@@ -1329,7 +1340,7 @@ public static partial class Interop
     /// <para>to a callback.</para>
     /// <para>Only one wakeup callback can be set.</para>
     /// </remarks>
-    [LibraryImport("libmpv-2", EntryPoint = "mpv_set_wakeup_callback")]
+    [LibraryImport(LibraryName, EntryPoint = "mpv_set_wakeup_callback")]
     public static partial void
         MPVSetWakeupCallback(MPVHandle ctx, MPVWakeupCallback<IntPtr> cb, IntPtr data); //TODO: More overloads?
 
@@ -1345,7 +1356,7 @@ public static partial class Interop
     /// <para>In case you called mpv_suspend() before, this will also forcibly reset the</para>
     /// <para>suspend counter of the given handle.</para>
     /// </remarks>
-    [LibraryImport("libmpv-2", EntryPoint = "mpv_wait_async_requests")]
+    [LibraryImport(LibraryName, EntryPoint = "mpv_wait_async_requests")]
     public static partial MPVError MPVWaitAsyncRequests(MPVHandle ctx);
 
     /// <summary>
@@ -1384,7 +1395,7 @@ public static partial class Interop
     /// <para>Only the mpv_handle on which this was called will receive the hook events,</para>
     /// <para>or can &quot;continue&quot; them.</para>
     /// </remarks>
-    [LibraryImport("libmpv-2", EntryPoint = "mpv_hook_add", StringMarshalling = StringMarshalling.Utf8)]
+    [LibraryImport(LibraryName, EntryPoint = "mpv_hook_add", StringMarshalling = StringMarshalling.Utf8)]
     public static partial MPVError MPVHookAdd(MPVHandle ctx, ulong replyUserData, string name, int priority);
 
     /// <summary>
@@ -1405,7 +1416,7 @@ public static partial class Interop
     /// <para>MPV_EVENT_HOOK, to pass an incorrect ID, or to call this on a mpv_handle</para>
     /// <para>different from the one that registered the handler and received the event.</para>
     /// </remarks>
-    [LibraryImport("libmpv-2", EntryPoint = "mpv_hook_continue")]
+    [LibraryImport(LibraryName, EntryPoint = "mpv_hook_continue")]
     public static partial MPVError MPVHookContinue(MPVHandle ctx, ulong id);
 
     #endregion
@@ -1452,7 +1463,7 @@ public static partial class Interop
     /// <para>strongly recommended.</para>
     /// <para>- If you want to use hwdec, possibly hwdec interop resources.</para>
     /// </remarks>
-    [LibraryImport("libmpv-2", EntryPoint = "mpv_render_context_create")]
+    [LibraryImport(LibraryName, EntryPoint = "mpv_render_context_create")]
     public static partial MPVError MPVRenderContextCreate(out MPVRenderContext res, MPVHandle mpv,
         MPVRenderParam renderParams);
 
@@ -1467,7 +1478,7 @@ public static partial class Interop
     /// <para>success, otherwise an error code depending on the parameter type</para>
     /// <para>and situation.</para>
     /// </returns>
-    [LibraryImport("libmpv-2", EntryPoint = "mpv_render_context_set_parameter")]
+    [LibraryImport(LibraryName, EntryPoint = "mpv_render_context_set_parameter")]
     public static partial MPVError MPVRenderContextSetParameter(MPVRenderContext ctx, MPVRenderParam param);
 
     /// <summary>
@@ -1491,7 +1502,7 @@ public static partial class Interop
     /// <para>of the required data type. The function will then overwrite that variable</para>
     /// <para>with the returned value (at least on success).</para>
     /// </remarks>
-    [LibraryImport("libmpv-2", EntryPoint = "mpv_render_context_get_info")]
+    [LibraryImport(LibraryName, EntryPoint = "mpv_render_context_get_info")]
     public static partial MPVError MPVRenderContextGetInfo(MPVRenderContext ctx, MPVRenderParam param);
 
     /// <summary>
@@ -1512,7 +1523,7 @@ public static partial class Interop
     /// <para>of the OpenGL backend, no OpenGL state or API is accessed.</para>
     /// <para>Calling this will raise an update callback immediately.</para>
     /// </remarks>
-    [LibraryImport("libmpv-2", EntryPoint = "mpv_render_context_set_update_callback")]
+    [LibraryImport(LibraryName, EntryPoint = "mpv_render_context_set_update_callback")]
     public static partial void MPVRenderContextSetUpdateCallback(MPVRenderContext ctx,
         MPVRenderUpdateCallback callback, IntPtr callbackCtx);
 
@@ -1539,7 +1550,7 @@ public static partial class Interop
     /// <para>If MPV_RENDER_PARAM_ADVANCED_CONTROL was set, this will do additional work</para>
     /// <para>such as allocating textures for the video decoder.</para>
     /// </remarks>
-    [LibraryImport("libmpv-2", EntryPoint = "mpv_render_context_update")]
+    [LibraryImport(LibraryName, EntryPoint = "mpv_render_context_update")]
     public static partial MPVRenderUpdateFlag MPVRenderContextUpdate(MPVRenderContext ctx);
 
     /// <summary>Render video.</summary>
@@ -1572,7 +1583,7 @@ public static partial class Interop
     /// <para>- Backend-specific target object, such as MPV_RENDER_PARAM_OPENGL_FBO.</para>
     /// <para>- Possibly transformations, such as MPV_RENDER_PARAM_FLIP_Y.</para>
     /// </remarks>
-    [LibraryImport("libmpv-2", EntryPoint = "mpv_render_context_render")]
+    [LibraryImport(LibraryName, EntryPoint = "mpv_render_context_render")]
     public static partial MPVError MPVRenderContextRender(MPVRenderContext ctx, MPVRenderParam param);
 
     /// <summary>
@@ -1585,7 +1596,7 @@ public static partial class Interop
     /// <para>function. If you use it inconsistently, expect bad video playback.</para>
     /// <para>If this is called while no video is initialized, it is ignored.</para>
     /// </remarks>
-    [LibraryImport("libmpv-2", EntryPoint = "mpv_render_context_report_swap")]
+    [LibraryImport(LibraryName, EntryPoint = "mpv_render_context_report_swap")]
     public static partial MPVError MPVRenderContextReportSwap(MPVRenderContext ctx);
 
     /// <summary>Destroy the mpv renderer state.</summary>
@@ -1597,7 +1608,7 @@ public static partial class Interop
     /// <para>If video is still active (e.g. a file playing), video will be disabled</para>
     /// <para>forcefully.</para>
     /// </remarks>
-    [LibraryImport("libmpv-2", EntryPoint = "mpv_render_context_free")]
+    [LibraryImport(LibraryName, EntryPoint = "mpv_render_context_free")]
     public static partial void MPVRenderContextFree(MPVRenderContext ctx);
 
     #endregion
@@ -1624,7 +1635,7 @@ public static partial class Interop
     /// <para>If a custom stream with the same name is already registered, then the</para>
     /// <para>MPV_ERROR_INVALID_PARAMETER error is returned.</para>
     /// </remarks>
-    [LibraryImport("libmpv-2", EntryPoint = "mpv_stream_cb_add_ro", StringMarshalling = StringMarshalling.Utf8)]
+    [LibraryImport(LibraryName, EntryPoint = "mpv_stream_cb_add_ro", StringMarshalling = StringMarshalling.Utf8)]
     public static partial MPVError MPVStreamCBAddRO(MPVHandle ctx, string protocol, IntPtr userData,
         MPVStreamCBOpenROCallback openFn);
 

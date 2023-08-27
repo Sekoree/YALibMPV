@@ -6,6 +6,41 @@
         <Nullable>enable</Nullable>
         <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
         <LangVersion>default</LangVersion>
+        <Configurations>Debug;Release_Linux;Release_Windows;Release_OSX</Configurations>
+        <Platforms>AnyCPU</Platforms>
+        <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
+        <Version>0.1.0</Version>
+        <Title>Yet Another LibMPV Wrapper</Title>
+        <Description>Just another (very untested) LibMPV wrapper, that tried to map MPV methods</Description>
+        <PackageProjectUrl>https://github.com/Sekoree/YALibMPV</PackageProjectUrl>
+        <PackageLicenseExpression>MIT</PackageLicenseExpression>
+        <PackageReadmeFile>README.md</PackageReadmeFile>
+        <RepositoryUrl>https://github.com/Sekoree/YALibMPV</RepositoryUrl>
+        <PackageTags>mpv;libmpv;pinvoke</PackageTags>
+        <AssemblyVersion>0.1</AssemblyVersion>
+        <FileVersion>0.1</FileVersion>
     </PropertyGroup>
-    
+
+    <ItemGroup>
+        <None Include="..\README.md" Pack="true" PackagePath="\"/>
+    </ItemGroup>
+
+    <PropertyGroup Condition=" '$(Configuration)' == 'Release_Windows' ">
+        <Optimize>true</Optimize>
+        <DefineConstants>TRACE;WINDOWS</DefineConstants>
+        <PackageId>YALibMPV.PInvoke.Windows</PackageId>
+    </PropertyGroup>
+
+    <PropertyGroup Condition=" '$(Configuration)' == 'Release_Linux' ">
+        <DefineConstants>TRACE;LINUX</DefineConstants>
+        <Optimize>true</Optimize>
+        <PackageId>YALibMPV.PInvoke.Linux</PackageId>
+    </PropertyGroup>
+
+    <PropertyGroup Condition=" '$(Configuration)' == 'Release_OSX' ">
+        <DefineConstants>TRACE;OSX</DefineConstants>
+        <Optimize>true</Optimize>
+        <PackageId>YALibMPV.PInvoke.OSX</PackageId>
+    </PropertyGroup>
+
 </Project>
