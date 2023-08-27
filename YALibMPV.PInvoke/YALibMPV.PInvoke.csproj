@@ -19,6 +19,9 @@
         <PackageTags>mpv;libmpv;pinvoke</PackageTags>
         <AssemblyVersion>0.1</AssemblyVersion>
         <FileVersion>0.1</FileVersion>
+        <PackageId Condition=" '$(Configuration)' == 'Release_Windows' ">YALibMPV.PInvoke.Windows</PackageId>
+        <PackageId Condition=" '$(Configuration)' == 'Release_Linux' ">YALibMPV.PInvoke.Linux</PackageId>
+        <PackageId Condition=" '$(Configuration)' == 'Release_OSX' ">YALibMPV.PInvoke.OSX</PackageId>
     </PropertyGroup>
 
     <ItemGroup>
@@ -28,19 +31,16 @@
     <PropertyGroup Condition=" '$(Configuration)' == 'Release_Windows' ">
         <Optimize>true</Optimize>
         <DefineConstants>TRACE;WINDOWS</DefineConstants>
-        <PackageId>YALibMPV.PInvoke.Windows</PackageId>
     </PropertyGroup>
 
     <PropertyGroup Condition=" '$(Configuration)' == 'Release_Linux' ">
         <DefineConstants>TRACE;LINUX</DefineConstants>
         <Optimize>true</Optimize>
-        <PackageId>YALibMPV.PInvoke.Linux</PackageId>
     </PropertyGroup>
 
     <PropertyGroup Condition=" '$(Configuration)' == 'Release_OSX' ">
         <DefineConstants>TRACE;OSX</DefineConstants>
         <Optimize>true</Optimize>
-        <PackageId>YALibMPV.PInvoke.OSX</PackageId>
     </PropertyGroup>
 
 </Project>
