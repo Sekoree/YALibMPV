@@ -11,7 +11,7 @@
         <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
         <Version>0.1.0</Version>
         <Title>Yet Another LibMPV Wrapper</Title>
-        <Description>Just another (very untested) LibMPV wrapper, that tried to map MPV methods</Description>
+        <Description>Just another (very untested) LibMPV wrapper</Description>
         <PackageProjectUrl>https://github.com/Sekoree/YALibMPV</PackageProjectUrl>
         <PackageLicenseExpression>MIT</PackageLicenseExpression>
         <PackageReadmeFile>README.md</PackageReadmeFile>
