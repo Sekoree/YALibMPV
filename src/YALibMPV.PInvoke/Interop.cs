@@ -512,7 +512,7 @@ public static partial class Interop
     /// <para>and input.conf).</para>
     /// </remarks>
     [LibraryImport(LibraryName, EntryPoint = "mpv_command", StringMarshalling = StringMarshalling.Utf8)]
-    public static partial MPVError MPVCommand(MPVHandle ctx, string?[] args);
+    public static partial MPVError MPVCommand(MPVHandle ctx, string[] args);
 
     /// <summary>
     /// <para>Same as mpv_command(), but allows passing structured data in any format.</para>
