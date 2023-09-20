@@ -482,3 +482,10 @@ $RECYCLE.BIN/
 
 # Vim temporary swap files
 *.swp
+
+# Rider 
+.idea/
+
+# bin and obj folders
+**/bin/
+**/obj/
